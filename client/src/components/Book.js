@@ -13,9 +13,10 @@ import axios from "axios";
 const Book = (props) => {
   const [book, setBook] = useState("");
   const [characters, setCharacters] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const fetchBookByHandle = async (handle) => {
-    const response = await axios.get(`${BASE_URL}/books/${handle}`);
+    const response = await axios.get(`${BASE_URL}/api/books/${handle}`);
     console.log("data", response.data);
   };
 
