@@ -14,7 +14,7 @@ if os.environ.get('ENV') == 'prod':
         uri = uri.replace("postgres://", "postgresql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/ai-chat-db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/ai-book-chat-local'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 cors = CORS(app)
