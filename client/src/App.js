@@ -69,7 +69,7 @@ function App() {
             <header className="App-header">AI Book Chat</header>
           </div>
         </Route>
-        <Route exact path="/add">
+        <Route exact path="/add-book">
           <div className="App">
             <header className="App-header">
               <form onSubmit={handleSubmit}>
