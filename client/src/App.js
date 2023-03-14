@@ -51,10 +51,15 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/books/charlottes-web">Charlotte's Web</Link>
           </li>
           <li>
-            <Link to="/books/charlottes-web">Charlotte's Web</Link>
+            <Link to="/books/james-and-the-giant-peach">
+              James and the Giant Peach
+            </Link>
+          </li>
+          <li>
+            <Link to="/books/a-wrinkle-in-time">A Wrinkle in Time</Link>
           </li>
         </ul>
       </nav>

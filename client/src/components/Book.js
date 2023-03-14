@@ -6,21 +6,45 @@ import {
   ChatContainer,
   MessageList,
   Message,
+  MessageGroup,
   MessageInput,
+  TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 import axios from "axios";
 
 const Book = (props) => {
   const [book, setBook] = useState("");
-  const [characters, setCharacters] = useState("");
+  const [character, setCharacter] = useState("");
   const [messages, setMessages] = useState([]);
+  const [typing, setTyping] = useState(false);
 
   const fetchBookByHandle = async (handle) => {
     const response = await axios.get(`${BASE_URL}/api/books/${handle}`);
-    console.log("data", response.data);
+    setBook(response.data.book.book);
+    setCharacter(response.data.character);
+    setMessages(
+      response.data.messages.filter((message) => message.role !== "system")
+    );
+    console.log(response.data);
   };
 
-  //TODO: fetch book by handle and initialise conversation with character
+  const continueConversation = async (
+    innerHtml,
+    textContent,
+    innerText,
+    nodes
+  ) => {
+    const question = innerText;
+    let updatedMessages = [...messages, { content: question, role: "user" }];
+    setMessages(updatedMessages);
+    setTyping(true);
+    const response = await axios.post(`${BASE_URL}/api/conversation`, {
+      messages: updatedMessages,
+      question: question,
+    });
+    setTyping(false);
+    setMessages(response.data);
+  };
 
   useEffect(() => {
     fetchBookByHandle(props.handle);
@@ -28,20 +52,42 @@ const Book = (props) => {
 
   return (
     <div>
-      <h1>Book {props.handle}</h1>
+      <h1>
+        Talk to {character} from {book}
+      </h1>
       <div style={{ position: "relative", height: "500px" }}>
         <MainContainer>
           <ChatContainer>
             <MessageList>
-              <Message
-                model={{
-                  message: "Hello my friend",
-                  sentTime: "just now",
-                  sender: "Joe",
-                }}
-              />
+              {messages &&
+                messages.map((message, idx) => {
+                  return (
+                    <MessageGroup
+                      key={idx}
+                      direction={
+                        message.role == "assistant" ? "incoming" : "outgoing"
+                      }
+                      sender={message.role == "assistant" ? character : "You"}
+                    >
+                      <MessageGroup.Messages>
+                        <Message
+                          model={{
+                            message: message.content,
+                            sentTime: "just now",
+                            sender:
+                              message.role == "assistant" ? character : "You",
+                          }}
+                        />
+                      </MessageGroup.Messages>
+                    </MessageGroup>
+                  );
+                })}
+              {typing && <TypingIndicator content={`${character} is typing`} />}
             </MessageList>
-            <MessageInput placeholder="Type message here" />
+            <MessageInput
+              placeholder="Type message here"
+              onSend={continueConversation}
+            />
           </ChatContainer>
         </MainContainer>
       </div>

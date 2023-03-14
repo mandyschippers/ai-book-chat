@@ -5,7 +5,8 @@ from datetime import datetime
 from flask_cors import CORS, cross_origin
 import os
 import re
-
+import openai
+import IPython
 
 app = Flask(__name__, static_folder='client/build', static_url_path='')
 if os.environ.get('ENV') == 'prod':
@@ -13,11 +14,21 @@ if os.environ.get('ENV') == 'prod':
     if uri and uri.startswith("postgres://"):
         uri = uri.replace("postgres://", "postgresql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
+    openai.api_key = os.environ.get('OPENAI_KEY')
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/ai-book-chat-local'
+    openai.api_key = os.environ.get('OPENAI_KEY')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 cors = CORS(app)
+model_id = "gpt-3.5-turbo"
+
+
+def get_initial_message(character, book):
+    return [
+        {"role": "system", "content": "Answer the following question as if you are " + character + " from " + book + ". How would " + character +
+            " answer the question? If the answer cannot be found in the book " + book + ", say you don\'t know the answer to that question. If the question is inappropriate for a 10 year old, say that you are not going to dignify that question with an answer. Answer as " + character + "."}
+    ]
 
 
 class Book(db.Model):
@@ -45,9 +56,6 @@ def format_book(book):
         'id': book.id,
         'created_at': book.created_at
     }
-
-
-# TODO conversation route to initialise a conversation with openai's gpt-3.5-turbo model
 
 
 @app.route('/')
@@ -88,10 +96,35 @@ def get_books():
 @app.route('/api/books/<handle>', methods=['GET'])
 def get_book(handle):
     book = Book.query.filter_by(handle=handle).first()
-    return {'book': format_book(book)}
+    formatted_book = format_book(book)
+    formatted_book['characters'] = formatted_book['characters'].split(',')
+    character = formatted_book['characters'][0]
+    messages = get_initial_message(
+        character, formatted_book['book'])
+    messages.append({"role": "assistant", "content": "Hi, I'm " + character +
+                    " from " + formatted_book['book'] + ". Ask me a question."})
+    return {'book': format_book(book), 'messages': messages, 'character': character}
 
 
-# delete an book
+@app.route('/api/conversation', methods=['POST'])
+def continue_conversation():
+    messages = request.json['messages']
+    question = request.json["question"]
+    # messages.append({"role": "user", "content": question})
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    reply = response.choices[0].message.content
+    messages.append({"role": "assistant", "content": reply})
+    return messages
+
+
 @app.route('/api/books/<id>', methods=['DELETE'])
 def delete_book(id):
     book = Book.query.filter_by(id=id).first()
