@@ -47,11 +47,11 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename={BASE_URL + "/"}>
       <nav>
         <ul>
           <li>
-            <Link to="/books/charlottes-web">Charlotte's Web</Link>
+            <Link to={"/books/charlottes-web"}>Charlotte's Web</Link>
           </li>
           <li>
             <Link to="/books/james-and-the-giant-peach">
@@ -64,7 +64,7 @@ function App() {
         </ul>
       </nav>
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <div className="App">
             <header className="App-header">
               <form onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ function App() {
           </div>
         </Route>
         <Route
-          path="/books/:handle"
+          path={"/books/:handle"}
           render={({ match }) => <Book handle={match.params.handle} />}
         />
       </Switch>
