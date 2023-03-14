@@ -66,6 +66,11 @@ function App() {
       <Switch>
         <Route exact path="/">
           <div className="App">
+            <header className="App-header">AI Book Chat</header>
+          </div>
+        </Route>
+        <Route exact path="/add">
+          <div className="App">
             <header className="App-header">
               <form onSubmit={handleSubmit}>
                 <label htmlFor="book">Book</label>
