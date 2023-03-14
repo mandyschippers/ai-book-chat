@@ -58,8 +58,9 @@ def format_book(book):
     }
 
 
-@app.route('/')
-def serve():
+@app.route('/',  defaults={'path': ''})
+@app.errorhandler(404)
+def serve(path):
     return send_from_directory(app.static_folder, 'index.html')
 
 

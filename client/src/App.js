@@ -47,7 +47,7 @@ function App() {
   };
 
   return (
-    <Router basename={BASE_URL + "/"}>
+    <Router>
       <nav>
         <ul>
           <li>
@@ -65,6 +65,11 @@ function App() {
       </nav>
       <Switch>
         <Route exact path="/">
+          <div className="App">
+            <header className="App-header">AI Book Chat</header>
+          </div>
+        </Route>
+        <Route path="/add">
           <div className="App">
             <header className="App-header">
               <form onSubmit={handleSubmit}>
