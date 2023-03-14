@@ -31,6 +31,7 @@ function App() {
     let data = {
       book: book,
       characters: characters,
+      handle: handle,
     };
     axios.post(BASE_URL + "/api/books", data);
   };
