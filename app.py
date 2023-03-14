@@ -4,11 +4,15 @@ from flask_migrate import Migrate
 from datetime import datetime
 from flask_cors import CORS, cross_origin
 import os
+import re
 
 
 app = Flask(__name__, static_folder='client/build', static_url_path='')
 if os.environ.get('ENV') == 'prod':
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    uri = os.getenv("DATABASE_URL")  # or other relevant config var
+    if uri and uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/ai-chat-db'
 db = SQLAlchemy(app)
