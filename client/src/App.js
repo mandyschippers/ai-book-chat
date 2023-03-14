@@ -33,6 +33,7 @@ function App() {
       characters: characters,
       handle: handle,
     };
+    console.log(data);
     axios.post(BASE_URL + "/api/books", data);
   };
 

@@ -65,7 +65,8 @@ def Welcome():
 def create_book():
     book = request.json['book']
     characters = request.json['characters']
-    newBook = Book(book, characters)
+    handle = request.json['handle']
+    newBook = Book(book, characters, handle)
     db.session.add(newBook)
     db.session.commit()
     return format_book(newBook)
