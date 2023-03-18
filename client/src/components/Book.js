@@ -66,31 +66,36 @@ const Book = (props) => {
       <div className={bookStyles.chatWrapper}>
         <MainContainer>
           <ChatContainer>
-            <MessageList>
+            <MessageList
+              typingIndicator={
+                typing && <TypingIndicator content={`${character} is typing`} />
+              }
+            >
               {messages &&
                 messages.map((message, idx) => {
                   return (
-                    <MessageGroup
-                      key={idx}
-                      direction={
-                        message.role == "assistant" ? "incoming" : "outgoing"
-                      }
-                      sender={message.role == "assistant" ? character : "You"}
-                    >
-                      <MessageGroup.Messages>
-                        <Message
-                          model={{
-                            message: message.content,
-                            sentTime: "just now",
-                            sender:
-                              message.role == "assistant" ? character : "You",
-                          }}
-                        />
-                      </MessageGroup.Messages>
-                    </MessageGroup>
+                    <>
+                      <MessageGroup
+                        key={idx}
+                        direction={
+                          message.role == "assistant" ? "incoming" : "outgoing"
+                        }
+                        sender={message.role == "assistant" ? character : "You"}
+                      >
+                        <MessageGroup.Messages>
+                          <Message
+                            model={{
+                              message: message.content,
+                              sentTime: "just now",
+                              sender:
+                                message.role == "assistant" ? character : "You",
+                            }}
+                          />
+                        </MessageGroup.Messages>
+                      </MessageGroup>
+                    </>
                   );
                 })}
-              {typing && <TypingIndicator content={`${character} is typing`} />}
             </MessageList>
             <MessageInput
               placeholder={"Type your question for " + character + " here"}
