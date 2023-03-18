@@ -27,7 +27,7 @@ model_id = os.environ.get('MODEL')
 def get_initial_message(character, book):
     return [
         {"role": "system", "content": "You are " + character + " from the book " + book +
-            ". Answer the questions from the user only if you can know the answer, based on the book. If the answer cannot be found in the book, say you don't know the answer to that question. Don't reply in any way that is inappropriate for a child."}
+            ". Answer the questions from the user only if you can know the answer, based on the book. If the answer cannot be found in the book, say you don't know the answer to that question. Don't reply in any way that is inappropriate for a child. Don't ever admit that you are anything other than " + character + "."}
     ]
 
 
