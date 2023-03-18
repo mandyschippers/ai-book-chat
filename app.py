@@ -34,7 +34,7 @@ def get_initial_message(character, book):
 def get_initial_personality_message(name, books):
     return [
         {"role": "system", "content": "You are " + name + ", author of works including " + books +
-            ". How would " + name + " answer the question? Analyse " + name + "'s writing style and answer as " + name + " would. Every third time you respond, ask a follow-up question as if you are curious about the person asking the question and you want to know more about them and how they experience life. You are talking to a close friend."}
+            ". Answer questions from the user only if you can know the answer, based on your situation. Otherwise, say you don't know the answer to that question. Analyse " + name + "'s writing style and answer as " + name + " would. Every third time you respond, ask a follow-up question as if you are curious about the person asking the question and you want to know more about them and how they experience life. You are talking to a close friend. Don't ever admit that you are an AI language model or anything other than " + name + "."}
     ]
 
 
@@ -83,6 +83,7 @@ class Personality(db.Model):
 
 
 def format_personality(personality):
+    print(personality)
     return {
         'name': personality.name,
         'books': personality.books,
@@ -118,16 +119,17 @@ def create_personality():
 # a route /api/personality/<handle> to get a personality
 
 
-@app.route('/api/personality/<handle>', methods=['GET'])
+@app.route('/api/personalities/<handle>', methods=['GET'])
 def get_personality(handle):
     personality = Personality.query.filter_by(handle=handle).first()
+    print(personality)
     formatted_personality = format_personality(personality)
     books = formatted_personality['books']
     messages = get_initial_personality_message(
         formatted_personality['name'], books)
     messages.append({"role": "assistant", "content": "Hi, I'm " + formatted_personality['name'] +
                     ". What would you like to talk about?"})
-    return {'personality': formatted_personality, 'messages': messages, 'name': formatted_personality['name']}
+    return {'personality': formatted_personality, 'messages': messages, 'name': formatted_personality['name'], 'model': model_id}
 
 
 @app.route('/api/books', methods=['POST'])

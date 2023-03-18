@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Book from "./components/Book";
+import Personality from "./components/Personality";
 import { BASE_URL } from "./constants";
 
 //create axios headers to allow Access-Control-Allow-Origin
@@ -115,6 +116,10 @@ function App() {
         <Route
           path={"/books/:handle"}
           render={({ match }) => <Book handle={match.params.handle} />}
+        />
+        <Route
+          path={"/personalities/:handle"}
+          render={({ match }) => <Personality handle={match.params.handle} />}
         />
       </Switch>
     </Router>
