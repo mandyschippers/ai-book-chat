@@ -164,8 +164,8 @@ def get_book(handle):
     character = formatted_book['characters'][0]
     messages = get_initial_message(
         character, formatted_book['book'])
-    messages.append({"role": "assistant", "content": "Hi, I'm " + character +
-                    " from " + formatted_book['book'] + ". Ask me a question."})
+    messages.append({"role": "assistant", "content": "Hi, I'm " +
+                    character + ". Ask me a question."})
     return {'book': format_book(book), 'messages': messages, 'character': character}
 
 
