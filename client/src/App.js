@@ -48,21 +48,23 @@ function App() {
 
   return (
     <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to={"/books/charlottes-web"}>Charlotte's Web</Link>
-          </li>
-          <li>
-            <Link to="/books/james-and-the-giant-peach">
-              James and the Giant Peach
-            </Link>
-          </li>
-          <li>
-            <Link to="/books/a-wrinkle-in-time">A Wrinkle in Time</Link>
-          </li>
-        </ul>
-      </nav>
+      <header className="App-header">
+        <nav>
+          <ul>
+            <li>
+              <Link to={"/books/charlottes-web"}>Charlotte's Web</Link>
+            </li>
+            <li>
+              <Link to="/books/james-and-the-giant-peach">
+                James and the Giant Peach
+              </Link>
+            </li>
+            <li>
+              <Link to="/books/a-wrinkle-in-time">A Wrinkle in Time</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
       <Switch>
         <Route exact path="/">
           <div className="App">
@@ -71,7 +73,7 @@ function App() {
         </Route>
         <Route path="/add">
           <div className="App">
-            <header className="App-header">
+            <div className="form-container">
               <form onSubmit={handleSubmit}>
                 <label htmlFor="book">Book</label>
                 <input
@@ -99,7 +101,7 @@ function App() {
                 />
                 <button type="submit">Submit</button>
               </form>
-            </header>
+            </div>
           </div>
         </Route>
         <Route

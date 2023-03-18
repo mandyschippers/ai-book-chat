@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import bookStyles from "./Book.module.css";
 import { BASE_URL } from "../constants";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
@@ -51,11 +52,11 @@ const Book = (props) => {
   }, []);
 
   return (
-    <div>
-      <h1>
+    <div className={bookStyles.container}>
+      <h1 className={bookStyles.title}>
         Talk to {character} from {book}
       </h1>
-      <div style={{ position: "relative", height: "500px" }}>
+      <div className={bookStyles.chatWrapper}>
         <MainContainer>
           <ChatContainer>
             <MessageList>
