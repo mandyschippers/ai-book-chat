@@ -68,7 +68,15 @@ function App() {
       <Switch>
         <Route exact path="/">
           <div className="App">
-            <header className="App-header">AI Book Chat</header>
+            <header className="App-header">
+              {" "}
+              <img
+                src="https://i.ibb.co/0QKJQhz/IMG-F58-DB70-A6715-1.jpg"
+                alt="EDUmetaverse"
+                className="logo"
+              />
+              AI Book Chat
+            </header>
           </div>
         </Route>
         <Route path="/add">

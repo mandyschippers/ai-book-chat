@@ -1,5 +1,6 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #282c34;
 }
 
 .App {
@@ -7,14 +8,14 @@ body {
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #282c34;
   padding: 20px;
 }
 
@@ -74,4 +75,9 @@ form button:hover {
   form {
     width: 80%;
   }
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 20px;
 }

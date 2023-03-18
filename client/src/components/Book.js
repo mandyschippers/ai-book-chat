@@ -19,6 +19,7 @@ const Book = (props) => {
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
   const [handle, setHandle] = useState(props.handle);
+  const [updateHandle, setUpdateHandle] = useState(false);
 
   const fetchBookByHandle = async (handle) => {
     const response = await axios.get(`${BASE_URL}/api/books/${handle}`);
@@ -50,7 +51,12 @@ const Book = (props) => {
 
   useEffect(() => {
     fetchBookByHandle(props.handle);
-  }, [handle, []]);
+  }, []);
+
+  useEffect(() => {
+    fetchBookByHandle(handle);
+    setUpdateHandle(false);
+  }, handle);
 
   return (
     <div className={bookStyles.container}>
@@ -93,6 +99,13 @@ const Book = (props) => {
           </ChatContainer>
         </MainContainer>
       </div>
+      <a href="https://www.edumetaverse.com.au/" target="_blank">
+        <img
+          src="https://i.ibb.co/0QKJQhz/IMG-F58-DB70-A6715-1.jpg"
+          alt="EDUmetaverse"
+          className={bookStyles.logo}
+        />
+      </a>
     </div>
   );
 };
