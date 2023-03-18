@@ -18,6 +18,7 @@ const Book = (props) => {
   const [character, setCharacter] = useState("");
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
+  const [handle, setHandle] = useState(props.handle);
 
   const fetchBookByHandle = async (handle) => {
     const response = await axios.get(`${BASE_URL}/api/books/${handle}`);
@@ -49,7 +50,7 @@ const Book = (props) => {
 
   useEffect(() => {
     fetchBookByHandle(props.handle);
-  }, []);
+  }, [handle, []]);
 
   return (
     <div className={bookStyles.container}>
@@ -86,7 +87,7 @@ const Book = (props) => {
               {typing && <TypingIndicator content={`${character} is typing`} />}
             </MessageList>
             <MessageInput
-              placeholder="Type message here"
+              placeholder={"Type your question for " + character + " here"}
               onSend={continueConversation}
             />
           </ChatContainer>

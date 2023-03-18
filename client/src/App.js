@@ -48,7 +48,7 @@ function App() {
 
   return (
     <Router>
-      <header className="App-header">
+      {/* <header className="App-header">
         <nav>
           <ul>
             <li>
@@ -64,7 +64,7 @@ function App() {
             </li>
           </ul>
         </nav>
-      </header>
+      </header> */}
       <Switch>
         <Route exact path="/">
           <div className="App">
