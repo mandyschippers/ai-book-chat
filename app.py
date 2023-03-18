@@ -31,6 +31,13 @@ def get_initial_message(character, book):
     ]
 
 
+def get_initial_personality_message(name, books):
+    return [
+        {"role": "system", "content": "You are " + name + ", author of works including " + books +
+            ". How would " + name + " answer the question? Analyse " + name + "'s writing style and answer as " + name + " would. Every third time you respond, ask a follow-up question as if you are curious about the person asking the question and you want to know more about them and how they experience life. You are talking to a close friend."}
+    ]
+
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book = db.Column(db.String(120), nullable=False)
@@ -58,6 +65,33 @@ def format_book(book):
     }
 
 
+class Personality(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    books = db.Column(db.String(2000), nullable=False)
+    handle = db.Column(db.String(120), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'Presonality: {self.name}'
+
+    def __init__(self, name, books, handle):
+        self.name = name
+        self.books = books
+        self.handle = handle
+
+
+def format_personality(personality):
+    return {
+        'name': personality.name,
+        'books': personality.books,
+        'handle': personality.handle,
+        'id': personality.id,
+        'created_at': personality.created_at
+    }
+
+
 @app.route('/',  defaults={'path': ''})
 @app.errorhandler(404)
 def serve(path):
@@ -68,6 +102,32 @@ def serve(path):
 @cross_origin()
 def Welcome():
     return 'Welcome to the AI Chat API'
+
+
+# do a route /api/personalities/add to add a personality
+@app.route('/api/personalities/add', methods=['POST'])
+def create_personality():
+    name = request.json['name']
+    books = request.json['books']
+    handle = request.json['handle']
+    newPersonality = Personality(name, books, handle)
+    db.session.add(newPersonality)
+    db.session.commit()
+    return format_personality(newPersonality)
+
+# a route /api/personality/<handle> to get a personality
+
+
+@app.route('/api/personality/<handle>', methods=['GET'])
+def get_personality(handle):
+    personality = Personality.query.filter_by(handle=handle).first()
+    formatted_personality = format_personality(personality)
+    books = formatted_personality['books']
+    messages = get_initial_personality_message(
+        formatted_personality['name'], books)
+    messages.append({"role": "assistant", "content": "Hi, I'm " + formatted_personality['name'] +
+                    ". What would you like to talk about?"})
+    return {'personality': formatted_personality, 'messages': messages, 'name': formatted_personality['name']}
 
 
 @app.route('/api/books', methods=['POST'])
@@ -113,7 +173,7 @@ def continue_conversation():
     question = request.json["question"]
     # messages.append({"role": "user", "content": question})
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=model_id,
         messages=messages,
         temperature=0.7,
         max_tokens=256,

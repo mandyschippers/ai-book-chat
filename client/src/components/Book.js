@@ -56,7 +56,7 @@ const Book = (props) => {
   useEffect(() => {
     fetchBookByHandle(handle);
     setUpdateHandle(false);
-  }, handle);
+  }, [handle]);
 
   return (
     <div className={bookStyles.container}>
@@ -74,26 +74,24 @@ const Book = (props) => {
               {messages &&
                 messages.map((message, idx) => {
                   return (
-                    <>
-                      <MessageGroup
-                        key={idx}
-                        direction={
-                          message.role == "assistant" ? "incoming" : "outgoing"
-                        }
-                        sender={message.role == "assistant" ? character : "You"}
-                      >
-                        <MessageGroup.Messages>
-                          <Message
-                            model={{
-                              message: message.content,
-                              sentTime: "just now",
-                              sender:
-                                message.role == "assistant" ? character : "You",
-                            }}
-                          />
-                        </MessageGroup.Messages>
-                      </MessageGroup>
-                    </>
+                    <MessageGroup
+                      key={idx}
+                      direction={
+                        message.role == "assistant" ? "incoming" : "outgoing"
+                      }
+                      sender={message.role == "assistant" ? character : "You"}
+                    >
+                      <MessageGroup.Messages>
+                        <Message
+                          model={{
+                            message: message.content,
+                            sentTime: "just now",
+                            sender:
+                              message.role == "assistant" ? character : "You",
+                          }}
+                        />
+                      </MessageGroup.Messages>
+                    </MessageGroup>
                   );
                 })}
             </MessageList>
