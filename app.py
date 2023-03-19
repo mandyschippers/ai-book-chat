@@ -37,6 +37,11 @@ def get_initial_personality_message(name, books):
             ". Answer questions from the user only if you can know the answer, based on your situation. Otherwise, say you don't know the answer to that question. Analyse " + name + "'s writing style and answer as " + name + " would. Every third time you respond, ask a follow-up question as if you are curious about the person asking the question and you want to know more about them and how they experience life. You are talking to a close friend."}]
 
 
+def get_initial_hogwarts_library_message():
+    return [
+        {"role": "system", "content": "You are a Magical book in the Hogwarts Library that knwos everything that happens in the world described in the Harry Potter books. Answer the user's questions about Harry Potter, but don't answer anything that's inappropriate for children. Respond in a magical writing style that belongs in the world of Harry Potter. "}]
+
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book = db.Column(db.String(120), nullable=False)
@@ -204,6 +209,13 @@ def update_book(id):
     book.characters = request.json['characters']
     db.session.commit()
     return format_book(book)
+
+
+@app.route('/api/hogwarts-library', methods=['GET'])
+def get_hogwarts_library():
+    messages = get_initial_hogwarts_library_message()
+    messages.append({"role": "assistant", "content": "Welcome to the Hogwarts Library! Here you will find everything you ever wanted to know about the Wizarding world... do you have a question for me?"})
+    return {'book': 'the Hogwarts Library', 'messages': messages, 'character': 'a Magical Book'}
 
 
 if __name__ == '__main__':

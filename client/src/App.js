@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Book from "./components/Book";
 import Personality from "./components/Personality";
 import { BASE_URL } from "./constants";
+import Hogwarts from "./components/Hogwarts";
 
 //create axios headers to allow Access-Control-Allow-Origin
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -121,6 +122,9 @@ function App() {
           path={"/personalities/:handle"}
           render={({ match }) => <Personality handle={match.params.handle} />}
         />
+        <Route path={"/hogwarts-library"}>
+          <Hogwarts />
+        </Route>
       </Switch>
     </Router>
   );
