@@ -1,12 +1,11 @@
 import axios from "axios";
+import { BASE_URL } from "../constants";
 
-//a service for conversations
-const ConversationService = {
-  //get all conversations
-  getConversations: async () => {
-    const response = await axios.get(`${BASE_URL}/api/conversations`);
-    return response.data;
-  },
-};
-
-export default ConversationService;
+async function continueConversation(updatedMessages, question) {
+  const response = await axios.post(`${BASE_URL}/api/conversation`, {
+    messages: updatedMessages,
+    question: question,
+  });
+  return [response.data];
+}
+export { continueConversation };

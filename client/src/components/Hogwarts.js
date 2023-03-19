@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import bookStyles from "./Book.module.css";
 import { BASE_URL } from "../constants";
+import { continueConversation } from "../services/ConversationService";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   MainContainer,
@@ -32,22 +33,15 @@ const Hogwarts = (props) => {
     getHogwartsMessage();
   }, []);
 
-  const continueConversation = async (
-    innerHtml,
-    textContent,
-    innerText,
-    nodes
-  ) => {
+  const handleConversation = (innerText) => {
     const question = innerText;
     let updatedMessages = [...messages, { content: question, role: "user" }];
     setMessages(updatedMessages);
     setTyping(true);
-    const response = await axios.post(`${BASE_URL}/api/conversation`, {
-      messages: updatedMessages,
-      question: question,
+    continueConversation(updatedMessages, question).then((response) => {
+      setTyping(false);
+      setMessages(response[0]);
     });
-    setTyping(false);
-    setMessages(response.data);
   };
 
   return (
@@ -89,7 +83,7 @@ const Hogwarts = (props) => {
             </MessageList>
             <MessageInput
               placeholder={"Type your question for " + character + " here"}
-              onSend={continueConversation}
+              onSend={handleConversation}
             />
           </ChatContainer>
         </MainContainer>
