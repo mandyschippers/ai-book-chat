@@ -1,0 +1,29 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #f4e9d9;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #4a2f2a;
+}
+
+.chatWrapper {
+  position: relative;
+  height: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #c4a381;
+  border: 3px solid #4a2f2a;
+}
+
+.logo {
+  display: block;
+  max-width: 150px;
+  margin: 20px auto;
+}
