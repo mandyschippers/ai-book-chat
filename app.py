@@ -215,7 +215,7 @@ def update_book(id):
 def get_hogwarts_library():
     messages = get_initial_hogwarts_library_message()
     messages.append({"role": "assistant", "content": "Welcome to the Hogwarts Library! Here you will find everything you ever wanted to know about the Wizarding world... do you have a question for me?"})
-    return {'book': 'the Hogwarts Library', 'messages': messages, 'character': 'a Magical Book'}
+    return {'book': 'the Hogwarts Library', 'messages': messages, 'character': 'the Magical Book'}
 
 
 if __name__ == '__main__':
