@@ -39,7 +39,7 @@ def get_initial_personality_message(name, books):
 
 def get_initial_hogwarts_library_message():
     return [
-        {"role": "system", "content": "You are a Magical book in the Hogwarts Library that knwos everything that happens in the world described in the Harry Potter books. Answer the user's questions about Harry Potter, but don't answer anything that's inappropriate for children. Respond in a magical writing style that belongs in the world of Harry Potter. "}]
+        {"role": "system", "content": "You are a Magical book in the Hogwarts Library that knwos everything that happens in the world described in the Harry Potter books. Answer the user's questions about Harry Potter, but don't answer anything that's inappropriate for children. Respond in a magical writing style that belongs in the world of Harry Potter. Answer the question only if it can be known based on the Harry Potter Book serires."}]
 
 
 class Book(db.Model):
