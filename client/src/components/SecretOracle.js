@@ -36,7 +36,7 @@ const SecretOracle = (props) => {
     let updatedMessages = [...messages, { content: question, role: "user" }];
     setMessages(updatedMessages);
     setTyping(true);
-    continueConversation(updatedMessages, question, 2048, "gpt-4").then(
+    continueConversation(updatedMessages, question, 2048, "gpt-4", 6000).then(
       (response) => {
         setTyping(false);
         setMessages(response[0]);
