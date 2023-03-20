@@ -6,7 +6,7 @@ async function continueConversation(
   question,
   max_length = 236,
   model = null,
-  timeout = 3000
+  timeout = 30000
 ) {
   const response = await axios.post(
     `${BASE_URL}/api/conversation`,
