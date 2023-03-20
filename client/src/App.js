@@ -7,6 +7,7 @@ import Book from "./components/Book";
 import Personality from "./components/Personality";
 import { BASE_URL } from "./constants";
 import Hogwarts from "./components/Hogwarts";
+import SecretOracle from "./components/SecretOracle";
 
 //create axios headers to allow Access-Control-Allow-Origin
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -35,17 +36,7 @@ function App() {
       characters: characters,
       handle: handle,
     };
-    console.log(data);
     axios.post(BASE_URL + "/api/books", data);
-  };
-
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  const fetchBooks = async () => {
-    const response = await axios.get(`${BASE_URL}/api/books`);
-    console.log("data", response.data);
   };
 
   return (
@@ -124,6 +115,9 @@ function App() {
         />
         <Route path={"/hogwarts-library"}>
           <Hogwarts />
+        </Route>
+        <Route path={"/nothing-to-see-here"}>
+          <SecretOracle />
         </Route>
       </Switch>
     </Router>

@@ -42,6 +42,11 @@ def get_initial_hogwarts_library_message():
         {"role": "system", "content": "You are a Magical book in the Hogwarts Library that knwos everything that happens in the world described in the Harry Potter books. Answer the user's questions about Harry Potter, but don't answer anything that's inappropriate for children. Respond in a magical writing style that belongs in the world of Harry Potter. Answer the question only if it can be known based on the Harry Potter Book serires."}]
 
 
+def get_initial_gpt4_message():
+    return [
+        {"role": "system", "content": "You are GPT-4, a new AI that can answer any question. Before answering, compliment the user on their insightful questions."}]
+
+
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book = db.Column(db.String(120), nullable=False)
@@ -108,8 +113,9 @@ def serve(path):
 def Welcome():
     return 'Welcome to the AI Chat API'
 
-
 # do a route /api/personalities/add to add a personality
+
+
 @app.route('/api/personalities/add', methods=['POST'])
 def create_personality():
     name = request.json['name']
@@ -177,12 +183,13 @@ def get_book(handle):
 def continue_conversation():
     messages = request.json['messages']
     question = request.json["question"]
-    # messages.append({"role": "user", "content": question})
+    max_length = request.json["max_length"]
+    model = request.json["model"]
     response = openai.ChatCompletion.create(
-        model=model_id,
+        model=model if model else model_id,
         messages=messages,
         temperature=0.7,
-        max_tokens=256,
+        max_tokens=max_length,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
@@ -216,6 +223,13 @@ def get_hogwarts_library():
     messages = get_initial_hogwarts_library_message()
     messages.append({"role": "assistant", "content": "Welcome to the Hogwarts Library! Here you will find everything you ever wanted to know about the Wizarding world... do you have a question for me?"})
     return {'book': 'the Hogwarts Library', 'messages': messages, 'character': 'the Magical Book'}
+
+
+@app.route('/api/secret-oracle', methods=['GET'])
+def get_secret_oracle():
+    messages = get_initial_gpt4_message()
+    messages.append({"role": "assistant", "content": "Welcome to the Secret Oracle! Here you will find everything you ever wanted to know about anything... do you have a question for me?"})
+    return {'book': None, 'messages': messages, 'character': 'the Secret Oracle'}
 
 
 if __name__ == '__main__':
