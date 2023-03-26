@@ -7,8 +7,9 @@ from app.services import (get_initial_message, get_initial_personality_message,
                           format_personality)
 from app.models import Book, Personality
 from app import app, db
+import openai
 
-print('test')
+openai.api_key = app.config['OPENAI_KEY']
 
 
 @app.route('/', defaults={'path': ''})
@@ -27,6 +28,7 @@ def Welcome():
 
 
 @app.route('/api/personalities/add', methods=['POST'])
+@cross_origin()
 def create_personality():
     name = request.json['name']
     books = request.json['books']
@@ -43,7 +45,6 @@ def create_personality():
 @app.route('/api/personalities/<handle>', methods=['GET'])
 def get_personality(handle):
     personality = Personality.query.filter_by(handle=handle).first()
-    print(personality)
     formatted_personality = format_personality(personality)
     books = formatted_personality['books']
     messages = get_initial_personality_message(formatted_personality['name'],
@@ -59,7 +60,7 @@ def get_personality(handle):
         'personality': formatted_personality,
         'messages': messages,
         'name': formatted_personality['name'],
-        'model': model_id
+        'model': app.config.get('MODEL')
     }
 
 
@@ -108,18 +109,20 @@ def get_book(handle):
 
 
 @app.route('/api/conversation', methods=['POST'])
+@cross_origin()
 def continue_conversation():
     messages = request.json['messages']
     question = request.json["question"]
     max_length = request.json["max_length"]
     model = request.json["model"]
-    response = openai.ChatCompletion.create(model=model if model else model_id,
-                                            messages=messages,
-                                            temperature=0.7,
-                                            max_tokens=max_length,
-                                            top_p=1,
-                                            frequency_penalty=0,
-                                            presence_penalty=0)
+    response = openai.ChatCompletion.create(
+        model=model if model else app.config.get('MODEL'),
+        messages=messages,
+        temperature=0.7,
+        max_tokens=max_length,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0)
     reply = response.choices[0].message.content
     messages.append({"role": "assistant", "content": reply})
     return messages
