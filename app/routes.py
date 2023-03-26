@@ -112,7 +112,6 @@ def get_book(handle):
 @cross_origin()
 def continue_conversation():
     messages = request.json['messages']
-    question = request.json["question"]
     max_length = request.json["max_length"]
     model = request.json["model"]
     response = openai.ChatCompletion.create(

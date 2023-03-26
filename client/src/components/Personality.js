@@ -22,14 +22,9 @@ const Personality = (props) => {
 
   const fetchPersonalityByHandle = async (handle) => {
     const response = await axios.get(`${BASE_URL}/api/personalities/${handle}`);
-    console.log(response.data);
     setName(response.data.name);
     setBooks(response.data.books);
-    console.log(response.data.model);
-    setMessages(
-      response.data.messages.filter((message) => message.role !== "system")
-    );
-    console.log(response.data);
+    setMessages(response.data.messages);
   };
 
   const continueConversation = async (
@@ -44,7 +39,6 @@ const Personality = (props) => {
     setTyping(true);
     const response = await axios.post(`${BASE_URL}/api/conversation`, {
       messages: updatedMessages,
-      question: question,
       max_length: 236,
       model: null,
     });
@@ -72,27 +66,30 @@ const Personality = (props) => {
               }
             >
               {messages &&
-                messages.map((message, idx) => {
-                  return (
-                    <MessageGroup
-                      key={idx}
-                      direction={
-                        message.role == "assistant" ? "incoming" : "outgoing"
-                      }
-                      sender={message.role == "assistant" ? name : "You"}
-                    >
-                      <MessageGroup.Messages>
-                        <Message
-                          model={{
-                            message: message.content,
-                            sentTime: "just now",
-                            sender: message.role == "assistant" ? name : "You",
-                          }}
-                        />
-                      </MessageGroup.Messages>
-                    </MessageGroup>
-                  );
-                })}
+                messages
+                  .filter((message) => message.role !== "system")
+                  .map((message, idx) => {
+                    return (
+                      <MessageGroup
+                        key={idx}
+                        direction={
+                          message.role == "assistant" ? "incoming" : "outgoing"
+                        }
+                        sender={message.role == "assistant" ? name : "You"}
+                      >
+                        <MessageGroup.Messages>
+                          <Message
+                            model={{
+                              message: message.content,
+                              sentTime: "just now",
+                              sender:
+                                message.role == "assistant" ? name : "You",
+                            }}
+                          />
+                        </MessageGroup.Messages>
+                      </MessageGroup>
+                    );
+                  })}
             </MessageList>
             <MessageInput
               placeholder={"Type your question for " + name + " here"}

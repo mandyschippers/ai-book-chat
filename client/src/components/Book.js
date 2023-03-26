@@ -25,9 +25,7 @@ const Book = (props) => {
     const response = await axios.get(`${BASE_URL}/api/books/${handle}`);
     setBook(response.data.book.book);
     setCharacter(response.data.character);
-    setMessages(
-      response.data.messages.filter((message) => message.role !== "system")
-    );
+    setMessages(response.data.messages);
   };
 
   const continueConversation = async (
@@ -42,7 +40,6 @@ const Book = (props) => {
     setTyping(true);
     const response = await axios.post(`${BASE_URL}/api/conversation`, {
       messages: updatedMessages,
-      question: question,
       max_length: 236,
       model: null,
     });
@@ -73,28 +70,31 @@ const Book = (props) => {
               }
             >
               {messages &&
-                messages.map((message, idx) => {
-                  return (
-                    <MessageGroup
-                      key={idx}
-                      direction={
-                        message.role == "assistant" ? "incoming" : "outgoing"
-                      }
-                      sender={message.role == "assistant" ? character : "You"}
-                    >
-                      <MessageGroup.Messages>
-                        <Message
-                          model={{
-                            message: message.content,
-                            sentTime: "just now",
-                            sender:
-                              message.role == "assistant" ? character : "You",
-                          }}
-                        />
-                      </MessageGroup.Messages>
-                    </MessageGroup>
-                  );
-                })}
+                messages.length > 0 &&
+                messages
+                  .filter((message) => message.role !== "system")
+                  .map((message, idx) => {
+                    return (
+                      <MessageGroup
+                        key={idx}
+                        direction={
+                          message.role == "assistant" ? "incoming" : "outgoing"
+                        }
+                        sender={message.role == "assistant" ? character : "You"}
+                      >
+                        <MessageGroup.Messages>
+                          <Message
+                            model={{
+                              message: message.content,
+                              sentTime: "just now",
+                              sender:
+                                message.role == "assistant" ? character : "You",
+                            }}
+                          />
+                        </MessageGroup.Messages>
+                      </MessageGroup>
+                    );
+                  })}
             </MessageList>
             <MessageInput
               placeholder={"Type your question for " + character + " here"}

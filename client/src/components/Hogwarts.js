@@ -38,7 +38,7 @@ const Hogwarts = (props) => {
     let updatedMessages = [...messages, { content: question, role: "user" }];
     setMessages(updatedMessages);
     setTyping(true);
-    continueConversation(updatedMessages, question).then((response) => {
+    continueConversation(updatedMessages, 356, null).then((response) => {
       setTyping(false);
       setMessages(response[0]);
     });
