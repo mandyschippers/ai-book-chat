@@ -3,7 +3,6 @@ import { BASE_URL } from "../constants";
 
 async function continueConversation(
   updatedMessages,
-  question,
   max_length = 236,
   model = null,
   timeout = 30000
@@ -12,7 +11,6 @@ async function continueConversation(
     `${BASE_URL}/api/conversation`,
     {
       messages: updatedMessages,
-      question: question,
       max_length: max_length,
       model: model,
     },

@@ -45,6 +45,8 @@ const Personality = (props) => {
     const response = await axios.post(`${BASE_URL}/api/conversation`, {
       messages: updatedMessages,
       question: question,
+      max_length: 236,
+      model: null,
     });
     setTyping(false);
     setMessages(response.data);

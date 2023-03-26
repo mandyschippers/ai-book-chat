@@ -28,7 +28,6 @@ const Book = (props) => {
     setMessages(
       response.data.messages.filter((message) => message.role !== "system")
     );
-    console.log(response.data);
   };
 
   const continueConversation = async (
@@ -44,6 +43,8 @@ const Book = (props) => {
     const response = await axios.post(`${BASE_URL}/api/conversation`, {
       messages: updatedMessages,
       question: question,
+      max_length: 236,
+      model: null,
     });
     setTyping(false);
     setMessages(response.data);
