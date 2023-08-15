@@ -8,6 +8,6 @@ app.config.from_object('config.Config')
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app)
 
 from app import routes

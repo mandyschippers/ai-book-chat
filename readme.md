@@ -13,3 +13,7 @@ ENV (prod)
 OPENAI_KEY (from openai)
 MODEL (openai llm model name)
 DATABASE_URL (from postgres)
+
+Front end
+
+- make sure that the url in constants.js matches the heroku url of the app
