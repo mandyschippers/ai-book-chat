@@ -8,7 +8,7 @@ class Config:
             uri = uri.replace("postgres://", "postgresql://", 1)
         SQLALCHEMY_DATABASE_URI = uri
         OPENAI_KEY = os.environ.get('OPENAI_KEY')
-        CORS_HEADERS = 'Content-Type'
+        # CORS_HEADERS = 'Content-Type'
     else:
         SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/ai-book-chat-local'
         OPENAI_KEY = os.environ.get('OPENAI_KEY')
