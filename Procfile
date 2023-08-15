@@ -1,2 +1,2 @@
 web: gunicorn app:app
-release: alembic upgrade head
+release: alembic -c alembic.ini upgrade head
