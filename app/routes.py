@@ -43,6 +43,7 @@ def create_personality():
 
 
 @app.route('/api/personalities/<handle>', methods=['GET'])
+@cross_origin()
 def get_personality(handle):
     personality = Personality.query.filter_by(handle=handle).first()
     formatted_personality = format_personality(personality)
@@ -143,6 +144,7 @@ def delete_book(id):
 
 
 @app.route('/api/books/<id>', methods=['PUT'])
+@cross_origin()
 def update_book(id):
     book = Book.query.filter_by(id=id).first()
     book.book = request.json['book']
@@ -152,6 +154,7 @@ def update_book(id):
 
 
 @app.route('/api/hogwarts-library', methods=['GET'])
+@cross_origin()
 def get_hogwarts_library():
     messages = get_initial_hogwarts_library_message()
     messages.append({
@@ -168,6 +171,7 @@ def get_hogwarts_library():
 
 
 @app.route('/api/secret-oracle', methods=['GET'])
+@cross_origin()
 def get_secret_oracle():
     messages = get_initial_gpt4_message()
     messages.append({
