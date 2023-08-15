@@ -65,6 +65,7 @@ def get_personality(handle):
 
 
 @app.route('/api/books', methods=['POST'])
+@cross_origin()
 def create_book():
     book = request.json['book']
     characters = request.json['characters']
@@ -79,6 +80,7 @@ def create_book():
 
 
 @app.route('/api/books', methods=['GET'])
+@cross_origin()
 def get_books():
     books = Book.query.order_by(Book.id.desc()).all()
     book_list = []
@@ -91,6 +93,7 @@ def get_books():
 
 
 @app.route('/api/books/<handle>', methods=['GET'])
+@cross_origin()
 def get_book(handle):
     book = Book.query.filter_by(handle=handle).first()
     formatted_book = format_book(book)
@@ -128,6 +131,7 @@ def continue_conversation():
 
 
 @app.route('/api/books/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_book(id):
     book = Book.query.filter_by(id=id).first()
     db.session.delete(book)
