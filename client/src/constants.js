@@ -1,4 +1,4 @@
 export const BASE_URL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5000"
-    : "https://ai-book-chat-c3acb9287107.herokuapp.com";
+    : "https://ai-edu-chat-23c10540322b.herokuapp.com";
