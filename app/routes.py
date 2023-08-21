@@ -3,9 +3,10 @@ from flask_cors import CORS, cross_origin
 from flask import render_template, send_from_directory, request, jsonify, make_response
 from app.services import (get_initial_message, get_initial_personality_message,
                           get_initial_hogwarts_library_message,
-                          get_initial_gpt4_message, format_book,
-                          format_personality)
-from app.models import Book, Personality
+                          get_initial_llm_message, get_initial_gpt4_message,
+                          format_book, format_personality,
+                          format_llm_personality)
+from app.models import Book, Personality, LlmPersonality
 from app import app, db
 import openai
 
@@ -37,6 +38,23 @@ def create_personality():
     db.session.add(newPersonality)
     db.session.commit()
     return format_personality(newPersonality)
+
+
+# route to add an llm personality
+
+
+@app.route('/api/add-personality', methods=['POST'])
+@cross_origin()
+def add_llm_personality():
+    name = request.json['name']
+    description = request.json['description']
+    llm_personality = request.json['llm_personality']
+    handle = request.json['handle']
+    newLlmPersonality = LlmPersonality(name, description, llm_personality,
+                                       handle)
+    db.session.add(newLlmPersonality)
+    db.session.commit()
+    return format_llm_personality(newLlmPersonality)
 
 
 # a route /api/personality/<handle> to get a personality
@@ -105,6 +123,29 @@ def get_book(handle):
         'book': format_book(book),
         'messages': messages,
         'character': character
+    }
+
+
+# get a single llm personality
+
+
+@app.route('/api/chat/<handle>', methods=['GET'])
+def get_llm_personality(handle):
+    llm_personality = LlmPersonality.query.filter_by(handle=handle).first()
+    formatted_llm_personality = format_llm_personality(llm_personality)
+    messages = get_initial_llm_message(
+        formatted_llm_personality['llm_personality'])
+    messages.append({
+        "role":
+        "assistant",
+        "content":
+        "Hi, I'm " + formatted_llm_personality['name'] + ". I am " +
+        formatted_llm_personality['description'] + ". Ask me a question."
+    })
+    return {
+        'personality': formatted_llm_personality,
+        'messages': messages,
+        'name': formatted_llm_personality['name']
     }
 
 

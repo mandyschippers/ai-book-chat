@@ -31,6 +31,10 @@ def get_initial_personality_message(name, books):
     }]
 
 
+def get_initial_llm_message(llm_personality):
+    return [{"role": "system", "content": llm_personality}]
+
+
 def get_initial_hogwarts_library_message():
     return [{
         "role":
@@ -62,4 +66,14 @@ def format_personality(personality):
         'handle': personality.handle,
         'id': personality.id,
         'created_at': personality.created_at
+    }
+
+
+def format_llm_personality(llm_personality):
+    return {
+        'name': llm_personality.name,
+        'description': llm_personality.description,
+        'llm_personality': llm_personality.llm_personality,
+        'handle': llm_personality.handle,
+        'id': llm_personality.id
     }

@@ -1,10 +1,11 @@
 import axios from "axios";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Book from "./components/Book";
 import Personality from "./components/Personality";
+import Chat from "./components/Chat";
+import AddPersonalityForm from "./components/AddPersonalityForm";
 import { BASE_URL } from "./constants";
 import Hogwarts from "./components/Hogwarts";
 import SecretOracle from "./components/SecretOracle";
@@ -72,6 +73,9 @@ function App() {
             </header>
           </div>
         </Route>
+        <Route path="/add-personality">
+          <AddPersonalityForm />
+        </Route>
         <Route path="/add">
           <div className="App">
             <div className="form-container">
@@ -108,6 +112,10 @@ function App() {
         <Route
           path={"/books/:handle"}
           render={({ match }) => <Book handle={match.params.handle} />}
+        />
+        <Route
+          path={"/chat/:handle"}
+          render={({ match }) => <Chat handle={match.params.handle} />}
         />
         <Route
           path={"/personalities/:handle"}
